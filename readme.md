@@ -20,9 +20,9 @@ python manage.py migrate
 
 按分类获取新闻
 
+用户评论
 
-
-
+用户收藏
 
 ## 任务一、二
 

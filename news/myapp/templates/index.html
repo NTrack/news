@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试显示json的数据</title>
+    <style>
+        /* 样式用于分隔线 */
+        .article-divider {
+            border-top: 1px solid #ccc;
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="articles-container"></div>
+
+<script>
+   fetch('/myapp/getjson/')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // 输出获取到的数据，以便查看其类型和结构
+        // 检查数据类型，如果是数组则进行迭代处理
+       if (Array.isArray(data)) {
+           data.forEach((item, index) => {
+               // 创建文章容器
+               const articleContainer = document.createElement('div');
+               articleContainer.classList.add('article');
+
+               // 设置内容
+               const content = document.createElement('div');
+               content.innerHTML = item.content;
+               articleContainer.appendChild(content);
+
+               const date = document.createElement('div');
+               date.textContent = item.date;
+               articleContainer.appendChild(date);
+
+               const img = document.createElement('img');
+               img.src = item.imgurl;
+               img.alt = 'Image';
+               articleContainer.appendChild(img);
+
+               const title = document.createElement('div');
+               title.textContent = item.title;
+               articleContainer.appendChild(title);
+
+               const type = document.createElement('div');
+               type.textContent = item.type;
+               articleContainer.appendChild(type);
+
+               const url = document.createElement('a');
+               url.href = item.url;
+               url.textContent = '原文链接';
+               url.target = '_blank';
+               articleContainer.appendChild(url);
+
+               // 添加到页面上
+               document.getElementById('articles-container').appendChild(articleContainer);
+
+               // 如果不是最后一个对象，则添加分隔线
+               if (index < data.length - 1) {
+                   const divider = document.createElement('div');
+                   divider.classList.add('article-divider');
+                   document.getElementById('articles-container').appendChild(divider);
+               }
+           });
+       } else {
+           // 如果数据不是数组，可以进行其他处理
+           console.error('Data is not an array:', data);
+       }
+    })
+    .catch(error => console.error('Error fetching JSON:', error));
+</script>
+
+</body>
+</html>

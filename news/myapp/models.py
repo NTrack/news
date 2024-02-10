@@ -33,11 +33,12 @@ user_id (外键参考用户表中的userid)
 article_id (外键参考文章表中的articleid)
 user_favorite：用户收藏数量
 """
-from django.db import models
+
 
 class Users(models.Model):
     user_id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=100)
+
 
 class Articles(models.Model):
     id = models.AutoField(primary_key=True)
@@ -50,11 +51,13 @@ class Articles(models.Model):
 
 
 class Comments(models.Model):
+    objects = models.Manager()
     comment_id = models.AutoField(primary_key=True)
     comment = models.TextField()
     create_time = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)   # 参照Users表的外键、级联删除，如果用户注销则评论自动删除
-    article = models.ForeignKey(Articles, on_delete=models.CASCADE)    # 同理，如果文章被删除，则评论自动删除
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)  # 参照Users表的外键、级联删除，如果用户注销则评论自动删除
+    article = models.ForeignKey(Articles, on_delete=models.CASCADE)  # 同理，如果文章被删除，则评论自动删除
+
 
 class Favorites(models.Model):
     id = models.AutoField(primary_key=True)
@@ -63,5 +66,4 @@ class Favorites(models.Model):
     user_favorite = models.IntegerField()
 
     class Meta:
-        unique_together = ('user', 'article')       # 同一个用户对同一篇文章只有一个收藏记录
-
+        unique_together = ('user', 'article')  # 同一个用户对同一篇文章只有一个收藏记录

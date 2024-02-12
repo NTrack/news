@@ -1,25 +1,28 @@
 import requests
-from django.shortcuts import render
-
 from .auth import TokenAuthenticate
-from .models import Articles
 from django.http import JsonResponse
-from .models import Users, Articles, Comments
+from .models import Articles, Comments
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .utils import create_jwt
 
 
-# 测试json获取,返回全部的内容信息
-def test(request):
-    return render(request, 'index.html')
+class ArticlesView(APIView):
+    def get(self, request):
+        if request.query_params.get('title') is not None:
+            article_title = request.query_params.get('title')
+            articles = Articles.objects.filter(title__icontains=article_title)
+            articles_data = list(articles.values())
+        else:
+            all_articles = Articles.objects.all()
+            articles_data = list(all_articles.values())
 
-
-def index(request):
-    all_articles = Articles.objects.all()
-    article_data = list(all_articles.values())  # 将查询集对象转换为字典列表
-    return JsonResponse(article_data, safe=False)
+        response_data = {
+            'msg': '获取成功',
+            'data': articles_data
+        }
+        return JsonResponse(response_data, status=200, safe=False)
 
 
 class TokenView(APIView):

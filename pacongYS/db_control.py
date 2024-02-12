@@ -54,18 +54,22 @@ def insert_article(connection, datalist):
 
             new_type = str(categorize.get(data[3]))
             data.append(new_type)
-            print(data[6])
+            # print(data[2])
 
             flag = 0
-            # 检查主键id是否已经存在
-            cursor.execute(f"SELECT `{id}` FROM `{table_name}` WHERE id = {data[0]}")
+            # 检查 url 是否存在
+            cursor.execute(f"SELECT `{content_url}` FROM `{table_name}` WHERE `{content_url}` = %s",(data[1],))
+            existing_url = cursor.fetchone()
 
-            existing_id = cursor.fetchone() is not None
-
-            if (existing_id):
+            if existing_url:
+                # 如果url存在，则跳过
                 continue
 
-            # 如果id不存在，继续插入
+            # 如果url都不存在，继续插入
+            cursor.execute(f"SELECT COUNT('{id}') FROM {table_name}")
+            total_count = cursor.fetchone()[0]
+            data[0] = total_count + 1
+
             sql_command = f'''
             INSERT INTO  `{table_name}`({id}, {content_url}, {title}, {content}, {img_url}, {date}, {news_type})
             VALUES (%s, %s, %s, %s, %s, %s, %s)

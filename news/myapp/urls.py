@@ -5,5 +5,6 @@ urlpatterns = [
     path('', views.test),
     path('index/',views.test),
     path('getjson/',views.index),
+    path('token/', views.TokenView.as_view()),
     path('comment/', views.CommentView.as_view())
 ]

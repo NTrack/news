@@ -36,11 +36,14 @@ user_favorite：用户收藏数量
 
 
 class Users(models.Model):
+    objects = models.Manager()
     user_id = models.AutoField(primary_key=True)
-    username = models.CharField(max_length=100)
+    username = models.CharField(max_length=100, null=True)
+    openid = models.CharField(max_length=100, unique=True)
 
 
 class Articles(models.Model):
+    objects = models.Manager()
     id = models.AutoField(primary_key=True)
     url = models.URLField()
     title = models.CharField(max_length=255)
@@ -60,6 +63,7 @@ class Comments(models.Model):
 
 
 class Favorites(models.Model):
+    objects = models.Manager()
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     article = models.ForeignKey(Articles, on_delete=models.CASCADE)

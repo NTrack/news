@@ -8,6 +8,8 @@
 4.标题图片
 5.时间
 """
+import time
+import schedule
 from bs4 import BeautifulSoup     # 网页解析，获取数据
 import re       # 正则表达式，进行文字匹配
 import urllib.request
@@ -128,7 +130,16 @@ def main():
         res = db_control.insert_article(connection,datalist)
         return res
 
-if __name__ == '__main__':
+def daily_task():
     res = main()
-    if(res):
+    if res:
         print(f"爬取完毕,已经将数据放置{db_control.database_name}数据库的{db_control.table_name}表中!")
+
+if __name__ == '__main__':
+    # 先执行一次爬取任务，后续自动调用爬取
+    daily_task()
+    # 每天凌晨执行一次任务
+    schedule.every().day.at("00:00").do(daily_task)
+    while True:
+        schedule.run_pending()
+        time.sleep(60)      # 60秒检查一次

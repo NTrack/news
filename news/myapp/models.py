@@ -17,7 +17,7 @@ type：文章类别
 用户数据表	users
 userid：用户主键
 username：用户名字
-password：用户密码
+
 
 评论数据表  comments
 comment_id (主键)
@@ -36,8 +36,9 @@ user_favorite：用户收藏数量
 
 
 class Users(models.Model):
-    user_id = models.AutoField(primary_key=True)
+    user_id = models.CharField(primary_key=True,max_length=100)
     username = models.CharField(max_length=100)
+    session_key = models.CharField(max_length=100,null=True)
 
 
 class Articles(models.Model):
@@ -67,3 +68,5 @@ class Favorites(models.Model):
 
     class Meta:
         unique_together = ('user', 'article')  # 同一个用户对同一篇文章只有一个收藏记录
+
+

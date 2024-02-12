@@ -1,11 +1,6 @@
-import requests
-from django.shortcuts import render
-from .models import Articles
-from django.http import JsonResponse
-from .models import Users, Articles, Comments
 from rest_framework.views import APIView
+from .models import Articles, Comments
 from rest_framework.response import Response
-
 
 class ArticlesView(APIView):
     def get(self, request):
@@ -16,12 +11,7 @@ class ArticlesView(APIView):
         else:
             all_articles = Articles.objects.all()
             articles_data = list(all_articles.values())
-
-        response_data = {
-            'msg': '获取成功',
-            'data': articles_data
-        }
-        return JsonResponse(response_data, status=200, safe=False)
+        return Response({ 'msg': '获取成功','data': articles_data})
 
 class CommentView(APIView):
     def get(self, request):
@@ -59,4 +49,3 @@ class CommentView(APIView):
         comment.comment = request.data.get('comment')
         comment.save()
         return Response({'msg': '修改成功', 'data': comment_id})
-

@@ -6,8 +6,8 @@ from rest_framework_jwt.settings import api_settings
 from django.http import JsonResponse
 from .models import Users
 
-AppID = "wx0bdf8f7709eae150"
-AppSecret = "d2c96c9a82c8144f0c58e68b342689f5"
+AppID = "wx0bdf8f7709eae150"        # 需要修改
+AppSecret = "d2c96c9a82c8144f0c58e68b342689f5"      # 需要修改
 
 def get_user_info_func(js_code):
     api_url = 'https://api.weixin.qq.com/sns/jscode2session?appid={0}&secret={1}&js_code={2}&grant_type=authorization_code'

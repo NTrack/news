@@ -61,6 +61,7 @@ class Comments(models.Model):
 
 
 class Favorites(models.Model):
+    objects = models.Manager()
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     article = models.ForeignKey(Articles, on_delete=models.CASCADE)
